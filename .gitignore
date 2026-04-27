@@ -1,0 +1,17 @@
+# Binários Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+main
+
+# Arquivos de teste
+*.test
+
+# Cache do Go
+*.out
+/vendor/
+
+# Binário compilado com o mesmo nome do diretório
+/aprendendo-go
