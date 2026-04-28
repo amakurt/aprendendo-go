@@ -1,66 +1,44 @@
 package main
 
-import "fmt"
+import (
+	"aprendendo-go/exercicios"
+	"html/template"
+	"log"
+	"net/http"
+)
 
-type conta interface {
-	Depositar(valor float64)
-	Sacar(valor float64)
-	VerSaldo() float64
+type PageData struct {
+	MapsOutput    string
+	StructsOutput string
 }
 
-type contaCorrente struct {
-	Titular string
-	Saldo   float64
-}
-type contaPoupanca struct {
-	Titular string
-	Saldo   float64
-}
+var data PageData
 
 func main() {
-	conta := contaCorrente{Titular: "Amauri", Saldo: 100}
-	conta.Depositar(50)
-	conta.Sacar(30)
+	// Carrega o template
+	tmpl := template.Must(template.ParseFiles("templates/index.html"))
 
-	fmt.Printf("Titular: %s - Saldo Final: %.2f\n", conta.Titular, conta.Saldo)
+	// Rota principal
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl.Execute(w, data)
+	})
 
-	poupanca := contaPoupanca{Titular: "Amauri", Saldo: 500}
-	poupanca.Depositar(100)
-	poupanca.Sacar(200)
-	exibirSaldo(&poupanca)
-}
+	// Rota para rodar Maps
+	http.HandleFunc("/run/maps", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			data.MapsOutput = exercicios.ExercicioMaps()
+		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	})
 
-func (c *contaCorrente) Depositar(valor float64) {
-	c.Saldo += valor
-}
-func (c *contaCorrente) VerSaldo() float64 {
-	return c.Saldo
-}
-func (c *contaCorrente) Sacar(valor float64) {
-	if valor > c.Saldo {
-		fmt.Println("Saldo insuficiente para o saque de: !", valor)
-	} else {
-		c.Saldo -= valor
-		fmt.Println("Saque de ", valor, "realizado com sucesso!")
-	}
-}
+	// Rota para rodar Structs
+	http.HandleFunc("/run/structs", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			data.StructsOutput = exercicios.ExercicioStructs()
+		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	})
 
-func (c *contaPoupanca) Depositar(valor float64) {
-	c.Saldo += valor
-}
-func (c *contaPoupanca) Sacar(valor float64) {
-	taxa := valor * 0.05
-	if valor > c.Saldo {
-		fmt.Println("Saldo Insuficiente!")
-	} else {
-		totalDebito := valor + taxa
-		c.Saldo -= totalDebito
-		fmt.Println("Saque de ", valor, "realizado com sucesso!")
-	}
-}
-func (c *contaPoupanca) VerSaldo() float64 {
-	return c.Saldo
-}
-func exibirSaldo(c conta) {
-	fmt.Printf("Saldo: %.2f\n", c.VerSaldo())
+	log.Println("🚀 Dashboard rodando em http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

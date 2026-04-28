@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Learning Dashboard</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+
+        pre {
+            background: #000;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            border: 1px solid #334155;
+            color: #10b981;
+        }
+
+        .status {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐹 Go Learning Dashboard</h1>
+    
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Exercício 1: Maps</div>
+                <form action="/run/maps" method="POST">
+                    <button class="btn">Executar</button>
+                </form>
+            </div>
+            <pre>{{.MapsOutput}}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Exercício 2: Structs & Interfaces</div>
+                <form action="/run/structs" method="POST">
+                    <button class="btn">Executar</button>
+                </form>
+            </div>
+            <pre>{{.StructsOutput}}</pre>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Próximo: Goroutines</div>
+                <button class="btn" disabled>Em breve</button>
+            </div>
+            <pre>Pronto para aprender concorrência?</pre>
+        </div>
+    </div>
+
+    <div class="status">Servidor rodando em Go 1.26.2 • localhost:8080</div>
+</body>
+</html>
